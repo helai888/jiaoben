@@ -1,11 +1,11 @@
-/*
-91系列视频
+# Loon 规则配置
 
-[rewrite_local]
+[Rewrite]
+# 屏蔽广告 - 去除以 .mp4 结尾的广告链接
+^https:\/\/.*\/videos\/.*\.mp4$ reject
 
-# 添加新的链接规则，适配 `https://api.heimuer.app/play` 的链接
-https:\/\/(hjll\.rmanf\.cn|api\.heimuer\.app)\/api\/app\/vid\/h5\/m3u8\/\S+\.m3u8\?token=[^&]+&c=https:\/\/haijiaode\.zgtcpt\.shop url script-request-header https://raw.githubusercontent.com/Yu9191/Rewrite/main/m3u8/91anwang.js
+# 匹配任意域名的 m3u8 视频链接
+^https:\/\/.*\/play\/[a-z0-9]{32}\.m3u8$ url script-request-header https://example.com/replace-m3u8.js
 
-[mitm]
-hostname = *.cloudfront.net, *.ninghaixin.club, *.wbwxe.com, wbapi.wbwxe.com, d13dw8kzjnavm.cloudfront.net, hxnd.*.vip, hjll.rmanf.cn, haijiaode.zgtcpt.shop, api.heimuer.app
-*/
+[MITM]
+hostname = *
