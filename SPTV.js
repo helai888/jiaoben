@@ -1,13 +1,11 @@
-#!name=屏蔽视频TV广告并替换
-#!desc=屏蔽广告并替换播放链接
-# 屏蔽指定广告视频链接，自动替换为自定义播放链接
+/*
+91系列视频
 
-[Script]
-# 屏蔽广告视频链接，适配任意文件名
-^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/.*\.mp4 url reject-dict
+[rewrite_local]
 
-# 替换为自定义播放链接，适配任意文件名
-^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/.*\.mp4 url redirect https://m3u8.hmrvideo.com/play/yourcustomhash.m3u8
+# 添加新的链接规则，适配 `https://api.heimuer.app/play` 的链接
+https:\/\/(hjll\.rmanf\.cn|api\.heimuer\.app)\/api\/app\/vid\/h5\/m3u8\/\S+\.m3u8\?token=[^&]+&c=https:\/\/haijiaode\.zgtcpt\.shop url script-request-header https://raw.githubusercontent.com/Yu9191/Rewrite/main/m3u8/91anwang.js
 
-[MITM]
-hostname = oss.yingshi.tv
+[mitm]
+hostname = *.cloudfront.net, *.ninghaixin.club, *.wbwxe.com, wbapi.wbwxe.com, d13dw8kzjnavm.cloudfront.net, hxnd.*.vip, hjll.rmanf.cn, haijiaode.zgtcpt.shop, api.heimuer.app
+*/
