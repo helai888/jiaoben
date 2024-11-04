@@ -1,6 +1,8 @@
 #!name=屏蔽视频TV广告
-#!desc=更新中
+#!desc=屏蔽并替换特定视频广告
 
-[Rule]
-# 屏蔽特定视频广告链接
-URL-REGEX,^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/2024071233224913\.mp4$,REJECT
+[Rewrite]
+^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/.*\.mp4 url 302 https://m3u8.hmrvideo.com/play/32a93186ea8a4629b5fcb542c0881cd6.m3u8
+
+[MITM]
+hostname = oss.yingshi.tv
