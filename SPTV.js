@@ -7,7 +7,7 @@
 ^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/.*\.mp4 url reject-dict
 
 # 替换为自定义播放链接，适配任意文件名
-^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/.*\.mp4 url replace https://m3u8.hmrvideo.com/play/yourcustomhash.m3u8
+^https:\/\/oss\.yingshi\.tv\/videos\/vod\/vi\/.*\.mp4 url redirect https://m3u8.hmrvideo.com/play/yourcustomhash.m3u8
 
 [MITM]
 hostname = oss.yingshi.tv
