@@ -3,8 +3,8 @@
 
 [rewrite_local]
 
-https:\/\/\S+\.m3u8\?token=[^&]+&c=https:\/\/\S+ url script-request-header https://raw.githubusercontent.com/Yu9191/Rewrite/main/m3u8/91anwang.js
+https:\/\/hjll\.okkss\.xyz\/api\/app\/vid\/h5\/m3u8\/.*\.m3u8\?token=[^&]+&c=https:\/\/haijiaode\.zgtcpt\.shop url script-request-header https://raw.githubusercontent.com/Yu9191/Rewrite/main/m3u8/91anwang.js
 
 [mitm]
-hostname = *.cloudfront.net, *.ninghaixin.club, *.wbwxe.com, wbapi.wbwxe.com, d13dw8kzjnavm.cloudfront.net, hxnd.*.vip, hjll.okkss.xyz, haijiaode.zgtcpt.shop
+hostname = hjll.okkss.xyz, haijiaode.zgtcpt.shop
 */
