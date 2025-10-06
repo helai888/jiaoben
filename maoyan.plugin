@@ -1,8 +1,11 @@
-#!name=猫眼测试
-#!desc=测试猫眼脚本
+#!name=猫眼影票抢票
+#!desc=修改猫眼影票响应，绕过缺货限制
+#!author=helai888
+#!homepage=https://github.com/helai888/jiaoben
+#!version=1.0.0
 
 [Script]
-test = type=http-response,pattern=^https?://maoyan\.com,script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan.js,requires-body=true,timeout=10
+猫眼影票 = type=http-response,pattern=^https?://maoyan\.com,script-path=https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js,requires-body=true,timeout=10,enable=true
 
 [MITM]
-hostname = maoyan.com
+hostname = maoyan.com, *.maoyan.com
