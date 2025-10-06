@@ -1,5 +1,3 @@
-[Script]
 http-response ^https?:\/\/.*\.maoyan\.com\/.* script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
-
 [Mitm]
 hostname = *.maoyan.com
