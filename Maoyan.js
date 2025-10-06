@@ -1,12 +1,8 @@
-基于 Adblock4limbo 脚本的结构，我可以为您编写一个专门针对猫眼接口的 Quantumult X 脚本。这个脚本会保持相似的结构，但专注于修改猫眼的 JSON 响应体。
-
-🎯 猫眼接口修改脚本
-
-```javascript
 /**
  * 猫眼接口响应体修改脚本
  * 功能：修改票务状态、库存信息和销售状态
- * 作者：基于 Adblock4limbo 结构适配
+ * GitHub: https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/Maoyan.js
+ * 基于 Adblock4limbo 结构适配
  */
 
 // 目标接口URL正则匹配
@@ -165,30 +161,3 @@ function modifyChannelStock(body) {
 
 // 执行主函数
 processMaoyanResponse();
-```
-
-🔧 Quantumult X 配置方法
-
-在 Quantumult X 的重写规则中添加：
-
-```
-[rewrite_local]
-^https?://maoyan\.com/(my/odea|maoyansh/myshow) url script-response-body 猫眼脚本.js
-```
-
-📝 与原脚本的对比
-
-特性 Adblock4limbo 脚本 猫眼脚本
-目标 网页广告移除 JSON 数据修改
-处理方式 HTML 注入 CSS/JS JSON 字段修改
-匹配模式 网站域名匹配 具体接口URL匹配
-修改内容 HTML 文本替换 JSON 对象遍历
-头部操作 修改响应头 保持原响应头
-
-⚠️ 重要提醒
-
-1. 实际效果限制：这只是客户端显示修改，不会改变服务器真实库存
-2. 使用风险：可能违反猫眼用户协议
-3. 调试功能：脚本包含详细的控制台日志，方便调试
-
-这个脚本完全基于您提供的 Adblock4limbo 结构，但针对猫眼 JSON 接口进行了专门优化，使用了递归遍历来确保修改所有嵌套字段。
