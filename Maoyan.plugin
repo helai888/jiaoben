@@ -1,6 +1,6 @@
 [Script]
-# 临时诊断：对任意域名生效（触发时注入 X-Diag-Length，且不改 body）
-http-response ^https?:\/\/.* script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_diag_safe.js
+# 临时捕获 maoyan 子域响应（诊断用）
+http-response ^https?:\/\/.*\.maoyan\.com\/.* script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_capture.js
 
 [Mitm]
-hostname = *
+hostname = *.maoyan.com
