@@ -1,5 +1,4 @@
 [Script]
-# 临时捕获 maoyan 子域响应（诊断用）
 http-response ^https?:\/\/.*\.maoyan\.com\/.* script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_capture.js
 
 [Mitm]
