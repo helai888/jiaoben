@@ -1,0 +1,87 @@
+[Plugin]
+# 猫眼数据修改插件
+name = 猫眼数据修改
+desc = 修改猫眼API返回数据，修复票务状态
+author = YourName
+version = 1.0.0
+
+# 匹配的域名
+hostname = maoyan.com
+
+# 脚本主体
+script = 
+(() => {
+    // 调试开关
+    const debug = true;
+    
+    // 日志函数
+    const log = (message) => {
+        if (debug) {
+            console.log(`[猫眼插件] ${message}`);
+        }
+    };
+    
+    // 主处理函数
+    const modifyResponse = (response) => {
+        try {
+            let body = $response.body;
+            const url = $request.url;
+            
+            log(`处理URL: ${url}`);
+            
+            // 根据不同的URL进行不同的修改
+            if (url.includes('/my/odea/project/detail')) {
+                log('处理项目详情接口');
+                // 修改 stockOutRegister 和 ticketStatus
+                body = body.replace(/"stockOutRegister":1/g, '"stockOutRegister":0');
+                body = body.replace(/"ticketStatus":2/g, '"ticketStatus":3');
+                // 修改 saleStatus
+                body = body.replace(/"saleStatus":4/g, '"saleStatus":3');
+                log('项目详情接口修改完成');
+                
+            } else if (url.includes('/my/odea/showTickets/validateStock')) {
+                log('处理库存验证接口');
+                // 修改验证结果
+                body = body.replace(/"success":false/g, '"success":true');
+                body = body.replace(/"error":\s*"[^"]*"/g, '"error":null');
+                body = body.replace(/"error":\s*[^,}\s]+/g, '"error":null');
+                log('库存验证接口修改完成');
+                
+            } else if (url.includes('/maoyansh/myshow/ajax/channelPage/floorPerfs')) {
+                log('处理场次信息接口');
+                // 修改库存和状态
+                body = body.replace(/"remainingStock":0/g, '"remainingStock":2297');
+                body = body.replace(/"showStatus":2/g, '"showStatus":0');
+                log('场次信息接口修改完成');
+            }
+            
+            log('修改完成，返回新数据');
+            return body;
+            
+        } catch (error) {
+            log(`处理出错: ${error}`);
+            return $response.body;
+        }
+    };
+    
+    // 检查是否是支持的URL
+    const isSupportedURL = (url) => {
+        const patterns = [
+            '/my/odea/project/detail',
+            '/my/odea/showTickets/validateStock', 
+            '/maoyansh/myshow/ajax/channelPage/floorPerfs'
+        ];
+        return patterns.some(pattern => url.includes(pattern));
+    };
+    
+    // 主执行逻辑
+    if ($response && isSupportedURL($request.url)) {
+        log('开始处理响应');
+        $done({
+            body: modifyResponse($response)
+        });
+    } else {
+        log('不支持的URL或没有响应体，直接放行');
+        $done({});
+    }
+})();
