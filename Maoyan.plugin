@@ -1,12 +1,8 @@
-#!name=猫眼状态修复（远程脚本版）
-#!desc=自动修正猫眼接口返回的库存 / 状态 / 销售字段
-#!author=你自己
-#!update=2025-10-06
+[Script]
+# 猫眼状态修复脚本 - 支持子域名，带调试通知
+http-response ^https?:\/\/.*\.maoyan\.com\/my\/odea\/project\/detail script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
+http-response ^https?:\/\/.*\.maoyan\.com\/my\/odea\/showTickets\/validateStock script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
+http-response ^https?:\/\/.*\.maoyan\.com\/maoyansh\/myshow\/ajax\/channelPage\/floorPerfs script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
 
-[rewrite_local]
-^https?:\/\/maoyan\.com\/my\/odea\/project\/detail url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan_fix.js
-^https?:\/\/maoyan\.com\/my\/odea\/showTickets\/validateStock url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan_fix.js
-^https?:\/\/maoyan\.com\/maoyansh\/myshow\/ajax\/channelPage\/floorPerfs url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan_fix.js
-
-[mitm]
-hostname = maoyan.com
+[Mitm]
+hostname = *.maoyan.com
