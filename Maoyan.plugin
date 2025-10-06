@@ -1,7 +1,5 @@
 [Script]
-http-response ^https?:\/\/.*\.maoyan\.com\/my\/odea\/project\/detail script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
-http-response ^https?:\/\/.*\.maoyan\.com\/my\/odea\/showTickets\/validateStock script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
-http-response ^https?:\/\/.*\.maoyan\.com\/maoyansh\/myshow\/ajax\/channelPage\/floorPerfs script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
+http-response ^https?:\/\/.*\.maoyan\.com\/.* script-path=https://raw.githubusercontent.com/helai888/jiaoben/main/maoyan_fix.js
 
 [Mitm]
 hostname = *.maoyan.com
