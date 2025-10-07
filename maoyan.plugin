@@ -2,7 +2,6 @@
 # 导入方法：Loon -> 脚本/插件 -> 导入此 URL
 
 [General]
-# 可选：插件名称
 name = 猫眼票务状态修改
 
 [rewrite_local]
