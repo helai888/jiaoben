@@ -1,19 +1,3 @@
-/*************************************
-  项目：猫眼票务状态修改（合并版）
-  说明：rewrite + mitm + 脚本内容在同一文件中，脚本主体保持你原始代码未改动
-  时间：2025-10-07
-**************************************
-
-[rewrite_local]
-^https?:\/\/maoyan\.com\/my\/odea\/project\/detail url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js
-^https?:\/\/maoyan\.com\/my\/odea\/showTickets\/validateStock url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js
-^https?:\/\/maoyan\.com\/maoyansh\/myshow\/ajax\/channelPage\/floorPerfs url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js
-
-[mitm]
-hostname = maoyan.com
-
-*************************************/
-
 /**
  * 猫眼票务状态修改脚本 - 基于微博广告脚本架构优化
  * 参考 @yichahucha 的模块化设计
@@ -146,10 +130,10 @@ var url = $request.url;
 
 // 记录请求信息用于调试
 console.log(`处理猫眼请求: ${url}`);
-console.log(`原始响应长度: ${body.length}`);
+if (body && body.length) console.log(`原始响应长度: ${body.length}`);
 
 // 修改响应体
 body = modifyMaoyanResponse(url, body);
 
-console.log(`修改完成，最终响应长度: ${body.length}`);
+if (body && body.length) console.log(`修改完成，最终响应长度: ${body.length}`);
 $done({ body });
