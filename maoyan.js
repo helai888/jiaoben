@@ -5,9 +5,9 @@
 **************************************
 
 [rewrite_local]
-^https?:\/\/maoyan\.com\/my\/odea\/project\/detail url script-response-body https://raw.githubusercontent.com/helai888/scripts/main/maoyan.js
-^https?:\/\/maoyan\.com\/my\/odea\/showTickets\/validateStock url script-response-body https://raw.githubusercontent.com/helai888/scripts/main/maoyan.js
-^https?:\/\/maoyan\.com\/maoyansh\/myshow\/ajax\/channelPage\/floorPerfs url script-response-body https://raw.githubusercontent.com/helai888/scripts/main/maoyan.js
+^https?:\/\/maoyan\.com\/my\/odea\/project\/detail url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js
+^https?:\/\/maoyan\.com\/my\/odea\/showTickets\/validateStock url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js
+^https?:\/\/maoyan\.com\/maoyansh\/myshow\/ajax\/channelPage\/floorPerfs url script-response-body https://raw.githubusercontent.com/helai888/jiaoben/refs/heads/main/maoyan.js
 
 [mitm]
 hostname = maoyan.com
