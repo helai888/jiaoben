@@ -1,9 +1,8 @@
 # 猫眼票务状态修改.plugin
-# 内联脚本（rewrite + mitm + 脚本都在同一文件）
-# 保存为 UTF-8 无 BOM，文件名示例：maoyan.plugin
+# UTF-8 无 BOM，LF 行尾
 
 [General]
-name = 猫眼票务状态修改
+name = 猫眼票务修改（inline）
 
 [rewrite_local]
 ^https?:\/\/maoyan\.com\/my\/odea\/project\/detail url script-response-body maoyan_inline
@@ -16,142 +15,82 @@ hostname = maoyan.com
 [Script]
 #name=maoyan_inline
 #type=script-response-body
-/**
- * 猫眼票务状态修改脚本 - 基于微博广告脚本架构优化
- * 参考 @yichahucha 的模块化设计
- */
+(function () {
+  // 以下为原始脚本内容（保持逻辑不变）
+  const PROJECT_DETAIL_URL = '/my/odea/project/detail';
+  const VALIDATE_STOCK_URL = '/my/odea/showTickets/validateStock';
+  const CHANNEL_STOCK_URL = '/maoyansh/myshow/ajax/channelPage/floorPerfs';
 
-// 猫眼核心接口定义
-const PROJECT_DETAIL_URL = '/my/odea/project/detail';
-const VALIDATE_STOCK_URL = '/my/odea/showTickets/validateStock';
-const CHANNEL_STOCK_URL = '/maoyansh/myshow/ajax/channelPage/floorPerfs';
-
-// 主处理函数
-function modifyMaoyanResponse(url, data) {
+  function modifyMaoyanResponse(url, data) {
     try {
-        // 解析JSON数据
-        const jsonData = JSON.parse(data);
-        let modified = false;
-        
-        if (url.indexOf(PROJECT_DETAIL_URL) > -1) {
-            modified = modifyProjectDetail(jsonData);
-        } else if (url.indexOf(VALIDATE_STOCK_URL) > -1) {
-            modified = modifyStockValidation(jsonData);
-        } else if (url.indexOf(CHANNEL_STOCK_URL) > -1) {
-            modified = modifyChannelStock(jsonData);
-        }
-        
-        return modified ? JSON.stringify(jsonData) : data;
-        
+      const jsonData = JSON.parse(data);
+      let modified = false;
+
+      if (url.indexOf(PROJECT_DETAIL_URL) > -1) {
+        modified = modifyProjectDetail(jsonData) || modified;
+      } else if (url.indexOf(VALIDATE_STOCK_URL) > -1) {
+        modified = modifyStockValidation(jsonData) || modified;
+      } else if (url.indexOf(CHANNEL_STOCK_URL) > -1) {
+        modified = modifyChannelStock(jsonData) || modified;
+      }
+      return modified ? JSON.stringify(jsonData) : data;
     } catch (e) {
-        console.log(`JSON解析失败: ${e.message}`);
-        return data;
+      // JSON 解析失败则返回原始 body
+      return data;
     }
-}
+  }
 
-// 项目详情修改
-function modifyProjectDetail(data) {
+  function modifyProjectDetail(data) {
     let modified = false;
-    
-    // 使用递归函数遍历修改
     function traverse(obj) {
-        for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                // 票务状态修改
-                if (key === 'stockOutRegister' && obj[key] === 1) {
-                    obj[key] = 0;
-                    modified = true;
-                    console.log("修改 stockOutRegister: 1 → 0");
-                }
-                if (key === 'ticketStatus' && obj[key] === 2) {
-                    obj[key] = 3;
-                    modified = true;
-                    console.log("修改 ticketStatus: 2 → 3");
-                }
-                if (key === 'saleStatus' && obj[key] === 4) {
-                    obj[key] = 3;
-                    modified = true;
-                    console.log("修改 saleStatus: 4 → 3");
-                }
-                
-                // 递归处理嵌套对象
-                if (typeof obj[key] === 'object' && obj[key] !== null) {
-                    traverse(obj[key]);
-                }
-            }
-        }
+      if (!obj || typeof obj !== 'object') return;
+      for (let key in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+        if (key === 'stockOutRegister' && obj[key] === 1) { obj[key] = 0; modified = true; }
+        if (key === 'ticketStatus' && obj[key] === 2) { obj[key] = 3; modified = true; }
+        if (key === 'saleStatus' && obj[key] === 4) { obj[key] = 3; modified = true; }
+        if (typeof obj[key] === 'object' && obj[key] !== null) traverse(obj[key]);
+      }
     }
-    
     traverse(data);
     return modified;
-}
+  }
 
-// 库存验证修改
-function modifyStockValidation(data) {
+  function modifyStockValidation(data) {
     let modified = false;
-    
     function traverse(obj) {
-        for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                if (key === 'success' && obj[key] === false) {
-                    obj[key] = true;
-                    modified = true;
-                    console.log("修改 success: false → true");
-                }
-                if (key === 'error' && obj[key] !== null) {
-                    obj[key] = null;
-                    modified = true;
-                    console.log("修改 error: 非null → null");
-                }
-                if (typeof obj[key] === 'object' && obj[key] !== null) {
-                    traverse(obj[key]);
-                }
-            }
-        }
+      if (!obj || typeof obj !== 'object') return;
+      for (let key in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+        if (key === 'success' && obj[key] === false) { obj[key] = true; modified = true; }
+        if (key === 'error' && obj[key] !== null) { obj[key] = null; modified = true; }
+        if (typeof obj[key] === 'object' && obj[key] !== null) traverse(obj[key]);
+      }
     }
-    
     traverse(data);
     return modified;
-}
+  }
 
-// 频道库存修改
-function modifyChannelStock(data) {
+  function modifyChannelStock(data) {
     let modified = false;
-    
     function traverse(obj) {
-        for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                if (key === 'remainingStock' && obj[key] === 0) {
-                    obj[key] = 2297;
-                    modified = true;
-                    console.log("修改 remainingStock: 0 → 2297");
-                }
-                if (key === 'showStatus' && obj[key] === 2) {
-                    obj[key] = 0;
-                    modified = true;
-                    console.log("修改 showStatus: 2 → 0");
-                }
-                if (typeof obj[key] === 'object' && obj[key] !== null) {
-                    traverse(obj[key]);
-                }
-            }
-        }
+      if (!obj || typeof obj !== 'object') return;
+      for (let key in obj) {
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+        if (key === 'remainingStock' && obj[key] === 0) { obj[key] = 2297; modified = true; }
+        if (key === 'showStatus' && obj[key] === 2) { obj[key] = 0; modified = true; }
+        if (typeof obj[key] === 'object' && obj[key] !== null) traverse(obj[key]);
+      }
     }
-    
     traverse(data);
     return modified;
-}
+  }
 
-// 主执行流程
-var body = $response.body;
-var url = $request.url;
+  var body = (typeof $response !== 'undefined' && $response.body) ? $response.body : null;
+  var url = (typeof $request !== 'undefined' && $request.url) ? $request.url : '';
 
-// 记录请求信息用于调试
-console.log(`处理猫眼请求: ${url}`);
-console.log(`原始响应长度: ${body.length}`);
-
-// 修改响应体
-body = modifyMaoyanResponse(url, body);
-
-console.log(`修改完成，最终响应长度: ${body.length}`);
-$done({ body });
+  if (body && url) {
+    body = modifyMaoyanResponse(url, body);
+  }
+  $done({ body: body });
+})();
